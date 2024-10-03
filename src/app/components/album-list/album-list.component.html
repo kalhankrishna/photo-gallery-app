@@ -1,0 +1,35 @@
+<div class="album-list">
+  <h1>Albums</h1>
+
+  <!-- Form to add a new album -->
+  <div class="new-album-form">
+    <input
+      type="text"
+      [(ngModel)]="newAlbumTitle"
+      placeholder="Album Title"
+      required
+    />
+    <textarea
+      [(ngModel)]="newAlbumDescription"
+      placeholder="Album Description (optional)"
+    ></textarea>
+    <button (click)="addAlbum()">Create Album</button>
+  </div>
+
+  <!-- Display the list of albums -->
+  <div
+    class="album-container"
+    *ngIf="(albums$ | async)?.length! > 0; else noAlbums"
+  >
+    <div *ngFor="let album of albums$ | async" class="album-item">
+      <h3>{{ album.title }}</h3>
+      <p>{{ album.description || "No description available" }}</p>
+      <button (click)="deleteAlbum(album.id)">Delete Album</button>
+    </div>
+  </div>
+
+  <!-- Message to display when there are no albums -->
+  <ng-template #noAlbums>
+    <p>No albums found. Create a new one!</p>
+  </ng-template>
+</div>
