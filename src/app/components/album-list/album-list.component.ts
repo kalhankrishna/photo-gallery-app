@@ -6,6 +6,8 @@ import { AlbumService } from '../../services/album/album.service';
 import { selectAllAlbums } from '../../store/selectors/album.selectors';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AlbumState } from '../../store/reducers/album.reducer';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-album-list',
@@ -19,7 +21,11 @@ export class AlbumListComponent implements OnInit {
   newAlbumTitle: string = ''; // Two-way binding for new album title input
   newAlbumDescription: string = ''; // Optional description for the new album
 
-  constructor(private albumService: AlbumService, private store: Store) {
+  constructor(
+    private albumService: AlbumService,
+    private store: Store<{ albumState: AlbumState }>,
+    private router: Router
+  ) {
     this.albums$ = this.store.select(selectAllAlbums); // Select albums from the store
   }
 
@@ -45,6 +51,10 @@ export class AlbumListComponent implements OnInit {
 
   deleteAlbum(albumId: string) {
     this.albumService.deleteAlbum(albumId); // Dispatch the delete album action
+  }
+
+  viewAlbum(albumId: string) {
+    this.router.navigate(['/album', albumId]); // Navigate to the album view component with the album ID
   }
 
   // Helper function to generate a unique ID (can be replaced with UUID or other logic)

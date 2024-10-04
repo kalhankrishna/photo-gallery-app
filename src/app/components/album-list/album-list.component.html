@@ -24,6 +24,7 @@
     <div *ngFor="let album of albums$ | async" class="album-item">
       <h3>{{ album.title }}</h3>
       <p>{{ album.description || "No description available" }}</p>
+      <button (click)="viewAlbum(album.id)">View Album</button>
       <button (click)="deleteAlbum(album.id)">Delete Album</button>
     </div>
   </div>

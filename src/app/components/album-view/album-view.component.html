@@ -1,1 +1,49 @@
-<p>album-view works!</p>
+<div class="album-view">
+  <h1>Album Photos</h1>
+
+  <!-- Form to add a new photo -->
+  <div class="new-photo-form">
+    <input
+      type="text"
+      [(ngModel)]="newPhotoTitle"
+      placeholder="Photo Title"
+      required
+    />
+    <input
+      type="text"
+      [(ngModel)]="newPhotoUrl"
+      placeholder="Photo URL"
+      required
+    />
+    <button (click)="addPhoto()">Add Photo</button>
+  </div>
+
+  <!-- Tag Filter -->
+  <div class="tag-filter">
+    <label for="tag-select">Filter by Tag:</label>
+    <select
+      id="tag-select"
+      [(ngModel)]="selectedTag"
+      (change)="filterPhotosByTag()"
+    >
+      <option value="">All</option>
+      <option *ngFor="let tag of availableTags" [value]="tag.name">
+        {{ tag.name }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Display the list of photos in the album -->
+  <div *ngIf="(photos$ | async)?.length! > 0; else noPhotos">
+    <div *ngFor="let photo of photos$ | async" class="photo-item">
+      <h3>{{ photo.title }}</h3>
+      <img [src]="photo.url" alt="{{ photo.title }}" />
+      <button (click)="deletePhoto(photo.id)">Delete Photo</button>
+    </div>
+  </div>
+
+  <!-- Message to display when there are no photos -->
+  <ng-template #noPhotos>
+    <p>No photos found in this album. Add some!</p>
+  </ng-template>
+</div>
