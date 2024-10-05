@@ -19,6 +19,7 @@ export class AlbumViewComponent implements OnInit {
   photos$: Observable<Photo[]>; // Observable to hold the photo list
   newPhotoTitle: string = ''; // Two-way binding for new photo title input
   newPhotoUrl: string = ''; // Two-way binding for new photo URL input
+  newPhotoTag: string = ''; // New tag input for the photo
   selectedTag: string = ''; // Tag for filtering photos
   availableTags: Tag[] = []; // Holds available tags (assuming from state or input)
 
@@ -54,12 +55,25 @@ export class AlbumViewComponent implements OnInit {
         id: this.generateUniqueId(),
         title: this.newPhotoTitle,
         url: this.newPhotoUrl,
-        tags: [], // Optional: Can include a way to add tags here
+        tags: this.newPhotoTag ? [this.newPhotoTag] : [],
         albumId: this.albumId,
         createdAt: new Date(),
       };
 
       this.photoService.addPhoto(newPhoto); // Dispatch add photo action
+
+      if (
+        this.newPhotoTag &&
+        !this.availableTags.find((tag) => tag.name === this.newPhotoTag)
+      ) {
+        const newTag: Tag = {
+          id: this.generateUniqueId(),
+          name: this.newPhotoTag,
+          photoIds: [newPhoto.id],
+        };
+        this.availableTags.push(newTag);
+      }
+
       this.newPhotoTitle = ''; // Clear input fields
       this.newPhotoUrl = '';
     }
